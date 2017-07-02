@@ -1,5 +1,5 @@
 # simpleECS
-A HaXe Unity3D-like entity-component system.
+A Haxe Unity3D-like entity-component system.
 
 
 ## Usage
