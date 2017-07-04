@@ -44,11 +44,11 @@ class Entity
     /**
      * Get the component you need.
      * @return 
-     * component:Any, for example: 
+     * component:T, for example: 
      * entity.getComponent(YourAwesomeComponent) 
      * returns YourAwesomeComponent.
      */
-    public function getComponent(classType:Any):Any 
+    public function getComponent<T:Component>(classType:Class<T>):T 
     {
         for (c in _components)
         {
