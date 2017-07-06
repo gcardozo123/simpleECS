@@ -4,23 +4,22 @@ package simpleECS;
  * A simple Component with its owner.
  * A Component is a feature/functionality that can be added to an Entity. 
  */
-class Component<T:Component>
+class Component
 {
     /**
      * The class type of this component.
      */
-    public var type(default, null):Class<T>;
+    public var type(default, null):Class<Component>;
     /**
      * The owner of this component.
      */
     public var owner(default, null):Entity;
     /**
-     * @param type the class type of this component.
      * @param owner the Entity that owns this component.
      */
-    public function new(type:Class<T>, owner:Entity) 
+    public function new(owner:Entity) 
     {
-        this.type = type;
+        type = Type.getClass(this);
         this.owner = owner;
     }
     /**
