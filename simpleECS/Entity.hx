@@ -52,8 +52,8 @@ class Entity
     {
         for (c in _components)
         {
-            if (c.type == classType)
-                return c;
+            if (c.type == cast classType)
+                return cast c;
         }
         return null;
     }
