@@ -71,11 +71,11 @@ class Entity
      * @param destroy should we destroy the component?
      * @return The component that was removed.
      */
-    public function removeComponent(classType:Any, ?destroy:Bool = false):Any 
+    public function removeComponent<T:Component>(classType:Class<T>, ?destroy:Bool = false):T
     {
         for (i in 0 ... _components.length)
         {
-            if (_components[i].type == classType)
+            if (_components[i].type == cast classType)
             {
                 var component = _components[i];
                 _components.splice(i, 1);
@@ -85,7 +85,7 @@ class Entity
                     component.destroy();
                     return null;
                 }
-                return component;
+                return cast component;
             }
         }
         return null;
