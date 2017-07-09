@@ -8,7 +8,7 @@ class Entity
     /**
      * Array of components.
      */
-    public var _components:Array<Component>;
+    private var _components:Array<Component>;
     /**
      * The current number of components.
      */
@@ -18,7 +18,10 @@ class Entity
     {
         _components = new Array<Component>();
     }
-    
+    /**
+     * numComponents getter.
+     * @return the number of components in this Entity.
+     */
     private function get_numComponents():Int
     {
         return _components.length;
@@ -26,6 +29,7 @@ class Entity
     /**
      * Adds a component to the components array.
      * @param component to be added.
+     * @return this Entity, so you can chain multiple calls.
      */
     public function addComponent(component:Component):Entity 
     {
@@ -34,12 +38,29 @@ class Entity
             if(getComponent(component.type) == null)
                 _components.push(component);
             else
-                trace("Error: This Entity already has a component of type " + Type.getClassName(component.type) + ", you can do Entity.replaceComponent if you need.");
+            {
+                trace("Error: This Entity already has a component of type " + 
+                    Type.getClassName(component.type) + ", you can call replaceComponent if you need.");
+            }
         }
         else
-            trace("Error: Entity.addComponent can't add null component");
+            trace("Error: Entity.addComponent can't add a null component.");
             
         return this;
+    }
+    /**
+     * Get the component's index.
+     * @param classType the type of the component. 
+     * @return The component's index or -1 if it doesn't exist.
+     */
+    private function getComponentIndex<T:Component>(classType:Class<T>):Int
+    {
+        for (i in 0 ... _components.length) 
+        {
+            if (_components[i].type == cast classType)
+                return i;
+        }
+        return -1;
     }
     /**
      * Get the component you need.
@@ -50,12 +71,17 @@ class Entity
      */
     public function getComponent<T:Component>(classType:Class<T>):T 
     {
-        for (c in _components)
-        {
-            if (c.type == cast classType)
-                return cast c;
-        }
-        return null;
+        var compIndex = getComponentIndex(classType);
+        return compIndex == -1 ? null : cast _components[compIndex];
+    }
+    /**
+     * Verifies if this Entity has a component.
+     * @param classType the type of the component.
+     * @return A boolean.
+     */
+    public function hasComponent<T:Component>(classType:Class<T>):Bool
+    {
+        return getComponentIndex(classType) != -1;
     }
     /**
      * Get all of the components.
@@ -68,53 +94,49 @@ class Entity
     /**
      * Removes a component.
      * @param classType the type of the component.
-     * @param destroy should we destroy the component?
-     * @return The component that was removed.
+     * @return this Entity, so you can chain multiple calls.
      */
-    public function removeComponent<T:Component>(classType:Class<T>, ?destroy:Bool = false):T
+    public function removeComponent<T:Component>(classType:Class<T>):Entity
     {
-        for (i in 0 ... _components.length)
+        var compIndex = getComponentIndex(classType);
+        if (compIndex == -1)
         {
-            if (_components[i].type == cast classType)
-            {
-                var component = _components[i];
-                _components.splice(i, 1);
-                
-                if (destroy)
-                {
-                    component.destroy();
-                    return null;
-                }
-                return cast component;
-            }
+            trace("Error: Entity.removeComponent, there's no component of type " + 
+                Type.getClassName(classType) + " to be removed.");
+            
+            return this;
         }
-        return null;
+        _components[compIndex].destroy();
+        _components.splice(compIndex, 1);
+        return this;
     }
     /**
      * Removes all components.
+     * Calls component.destroy() on each one.
      */
     public function removeAllComponents():Void
     {
+        for (c in _components)
+            c.destroy();
+        
         _components.splice(0, _components.length);
     }
     /**
      * Replaces a component.
-     * @param component the type of the component.
-     * @param destroy should we destroy the old component?
+     * @param newComponent the new component that is 
+     * going to replace the old one.
      */
-    public function replaceComponent(component:Component, ?destroy:Bool = false):Void 
+    public function replaceComponent(newComponent:Component):Void 
     {
-        for (i in 0 ... _components.length)
+        var compIndex = getComponentIndex(newComponent.type);
+        if (compIndex == -1)
         {
-            if (_components[i].type == component.type)
-            {
-                if (destroy)
-                    _components[i].destroy();
-
-                _components[i] = component;
-                break;
-            }
+            trace("Error: Entity.replaceComponent couldn't find a componenty of type " + 
+                Type.getClassName(newComponent.type));
+            
+            return;
         }
-        trace("Error: Entity.replaceComponent couldn't find a componenty of type " + Type.getClassName(component.type));
+        _components[compIndex].destroy();
+        _components[compIndex] = newComponent;
     }
 }

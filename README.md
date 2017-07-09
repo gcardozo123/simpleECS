@@ -36,8 +36,12 @@ class OneComponent extends Component
     /*ALWAYS override this method so you can properly destroy your components.*/
     override public function destroy():Void
     {
+        if (_isDestroyed) //preventing multiple destroy calls.
+            return;
+            
+        _isDestroyed = true;
+        //your component destruction code goes here...
         super.destroy();
-        //component destruction goes here...
         trace("OneComponent destroyed.");
     }
 }
@@ -55,8 +59,12 @@ class OtherComponent extends Component
     /*ALWAYS override this method so you can properly destroy your components.*/
     override public function destroy():Void
     {
+        if (_isDestroyed) //preventing multiple destroy calls.
+            return;
+            
+        _isDestroyed = true;
+        //your component destruction code goes here...
         super.destroy();
-        //component destruction goes here...
         trace("OtherComponent destroyed.");
     }
 }
