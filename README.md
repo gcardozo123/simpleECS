@@ -80,7 +80,7 @@ oneComp.oneComponentMethod();
 
 var otherComp:OtherComponent = ent.getComponent(OtherComponent);
 otherComp.otherComponentMethod();
-otherComp = ent.removeComponent(OtherComponent, true); //now otherComp is null.
+otherComp = ent.removeComponent(OtherComponent);
 
 trace("ent.numComponents: " + ent.numComponents + "\n"); //ent.numComponents: 1
 ```
