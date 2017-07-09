@@ -8,11 +8,8 @@ class Component
 {
     /**
      * The class type of this component.
-     * If you're extending Component, in the constructor of the extended class
-     * you must have: 
-     * this.type = MyExtendedComponent;
      */
-    public var type(default, null):Any;
+    public var type(default, null):Class<Component>;
     /**
      * The owner of this component.
      */
@@ -22,6 +19,7 @@ class Component
      */
     public function new(owner:Entity) 
     {
+        type = Type.getClass(this);
         this.owner = owner;
     }
     /**
