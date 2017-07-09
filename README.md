@@ -21,7 +21,6 @@ class OneComponent extends Component
     public function new(owner:Entity) 
     {
         super(owner);
-        this.type = OneComponent;
     }
     public function oneComponentMethod():Void
     {
@@ -48,7 +47,6 @@ class OtherComponent extends Component
     public function new(owner:Entity) 
     {
         super(owner);
-        this.type = OtherComponent;
     }   
     public function otherComponentMethod():Void
     {
